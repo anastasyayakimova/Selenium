@@ -8,7 +8,7 @@ driver.get('http://localhost/litecart/')
 def find_element_sticker(driver, element):
     try:
         sticker=element.find_elements(By.CSS_SELECTOR, "div.sticker")
-        count=len(sticker) #считает все стикеры на странице, а не в контексте данного li
+        count=len(sticker)
         print(count)
         if count==1:
             print("1 стикер")
