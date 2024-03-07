@@ -12,6 +12,8 @@ def find_element_sticker(driver, element):
         print(count)
         if count==1:
             print("1 стикер")
+        elif count==0:
+            print("0 стикеров")
         else:
             print("Стикеров больше")
         return True
