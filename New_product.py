@@ -19,8 +19,13 @@ for cookie in pickle.load(open('test', 'rb')):
 
 brauser.get('http://localhost/litecart/admin/?app=catalog&doc=catalog')
 
+elements=brauser.find_elements(By.XPATH,"//input[contains(@name, 'products[')]")
+count1=len(elements)
+print(count1)
+
 add_new_prod=brauser.find_element(By.XPATH,"//div[@style='float: right;']/a[2]").click()
 
+status=brauser.find_element(By.CSS_SELECTOR,"label input[value='1']").click()
 Name=brauser.find_element(By.CSS_SELECTOR,"input[name='name[en]']").send_keys("New Utka")
 Code=brauser.find_element(By.CSS_SELECTOR,"input[name='code']").send_keys("12345678")
 Gender=brauser.find_element(By.CSS_SELECTOR,"input[value='1-2']").click()
@@ -39,10 +44,9 @@ absolute=os.path.abspath(relative_patch)
 print(absolute)
 imag=brauser.find_element(By.CSS_SELECTOR,"input[name='new_images[]']").send_keys(absolute)
 
-datavaildfrom=brauser.find_element(By.CSS_SELECTOR,"input[name='date_valid_from']").click()
-brauser.find_element(By.CSS_SELECTOR,"input[name='date_valid_from']").send_keys("13.03.2024")
-datavaildto=brauser.find_element(By.CSS_SELECTOR,"input[name='date_valid_to']").click()
-brauser.find_element(By.CSS_SELECTOR,"input[name='date_valid_to']").send_keys("13.04.2024")
+datavaildfrom=brauser.find_element(By.CSS_SELECTOR,"input[name='date_valid_from']").send_keys("13.03.2024")
+datavaildto=brauser.find_element(By.CSS_SELECTOR,"input[name='date_valid_to']").send_keys("13.04.2024")
+time.sleep(3)
 
 brauser.find_element(By.LINK_TEXT,'Information').click()
 manuf=brauser.find_element(By.CSS_SELECTOR,"select[name='manufacturer_id']")
@@ -73,11 +77,10 @@ inclpriceeur=brauser.find_element(By.CSS_SELECTOR,"input[name='gross_prices[EUR]
 
 Save=brauser.find_element(By.CSS_SELECTOR,"button[name='save']").click()
 
-try:
-    brauser.find_element(By.LINK_TEXT, "New Utka")
-    print("True")
-except NoSuchElementException:
-    print("False")
+elements2=brauser.find_elements(By.XPATH,"//input[contains(@name, 'products[')]")
+count2=len(elements2)
+print(count2)
+assert count2>count1
 
 
 time.sleep(3)
