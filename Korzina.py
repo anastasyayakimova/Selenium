@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 
 brauser=webdriver.Chrome()
-brauser.implicitly_wait(10)
+brauser.implicitly_wait(0)
 brauser.get('http://localhost/litecart/en/')
 
 for i in range(1,4):
@@ -22,21 +22,20 @@ for i in range(1,4):
         select=Select(sel)
         select.select_by_visible_text('Small')
         brauser.find_element(By.CSS_SELECTOR, "button[name='add_cart_product']").click()
-        wait=WebDriverWait(brauser,10)
-        element = wait.until(EC.text_to_be_present_in_element((By.XPATH,".//*[ @ id = 'cart']//a//span[@class='quantity']"),str(i)))
-        brauser.get('http://localhost/litecart/en/')
     except NoSuchElementException:
         button=brauser.find_element(By.CSS_SELECTOR, "button[name='add_cart_product']").click()
-
-        wait=WebDriverWait(brauser,10)
-        element = wait.until(EC.text_to_be_present_in_element((By.XPATH,".//*[ @ id = 'cart']//a//span[@class='quantity']"),str(i)))
-        brauser.get('http://localhost/litecart/en/')
+    wait=WebDriverWait(brauser,5)
+    element = wait.until(EC.text_to_be_present_in_element((By.XPATH,".//*[ @ id = 'cart']//a//span[@class='quantity']"),str(i)))
+    brauser.get('http://localhost/litecart/en/')
 
 
 brauser.get("http://localhost/litecart/en/checkout")
+wait=WebDriverWait(brauser,5)
 quk=brauser.find_elements(By.CSS_SELECTOR,"td.sku")
+
 for j in range(len(quk)):
+    quk=brauser.find_elements(By.CSS_SELECTOR,"td.sku")
     delit=brauser.find_element(By.NAME,"remove_cart_item").click()
-    wait=WebDriverWait(brauser,10)
+    wait=WebDriverWait(brauser,5)
     wait.until(EC.staleness_of(quk[0]))
 time.sleep(2)
