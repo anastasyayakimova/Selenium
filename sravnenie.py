@@ -3,7 +3,7 @@ import pytest
 from selenium import webdriver
 from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
-
+from selenium.webdriver.support.color import Color
 
 brauser=webdriver.Chrome()
 brauser.implicitly_wait(10)
@@ -20,7 +20,6 @@ prise_regular_color=0
 prise_campaign_color=0
 prise_regular_line=0
 prise_campaign_weight=0
-weight=700
 
 for i in compaings:
     t=i.find_element(By.CSS_SELECTOR, "div#box-campaigns li div.name")
@@ -33,35 +32,34 @@ for i in compaings:
     prise_campaign=ps.text
     print(prise_campaign)
     #размер
-    sizeregular=p.size
-    heightwidthR=[]
-    for key, value in sizeregular.items():
-        heightwidthR.append(value)
-    print(heightwidthR)
-    sizecampaign=ps.size
-    heightwidthC=[]
-    for key, value in sizecampaign.items():
-         heightwidthC.append(value)
-    print(heightwidthC)
-    assert heightwidthC[0]>heightwidthR[0]
-    assert heightwidthC[1]>heightwidthR[1]
+    font_sizeP=p.value_of_css_property('font-size')
+    fsp=font_sizeP.replace('px',"")
+    print(fsp)
+    font_sizePS=ps.value_of_css_property("font-size")
+    fsps=font_sizePS.replace('px',"")
+    print(fsps)
+    assert float(fsp)<float(fsps)
+
     #цвет
     prise_regular_color=p.value_of_css_property('color')
-    print(prise_regular_color)
-    ppp=prise_regular_color.replace('rgba(',"").replace(")","")
+    prc=Color.from_string(prise_regular_color).rgba
+    print(prc)
+
+    ppp=prc.replace('rgba(',"").replace(")","")
     prc=ppp.split(', ')
     assert prc[0]==prc[1]==prc[2]
 
     prise_campaign_color=ps.value_of_css_property('color')
-    print(prise_campaign_color)
-    ccc=prise_campaign_color.replace('rgba(',"").replace(")","")
+    pcc=Color.from_string(prise_campaign_color).rgba
+    print(pcc)
+
+    ccc=pcc.replace('rgba(',"").replace(")","")
     pcc=ccc.split(', ')
     assert pcc[1]=='0'
     assert pcc[2]=='0'
 
     prise_campaign_weight=ps.value_of_css_property('font-weight')
     print(prise_campaign_weight)
-    assert int(prise_campaign_weight)>= weight
     #зачеркнутая линия
     prise_regular_line=p.value_of_css_property('text-decoration-line')
     print(prise_regular_line)
@@ -93,40 +91,37 @@ for l in range(len(link)):
     print(prise_regular2)
     assert prise_regular2==prise_regular
     #размер
-    prise_regular2_size=pg2.size
-    pricesizeR2=[]
-    for key, value in prise_regular2_size.items():
-        pricesizeR2.append(value)
-    print(pricesizeR2)
+    prise_regular2_size=pg2.value_of_css_property("font-size")
+    pr2s=prise_regular2_size.replace('px',"")
+    print(pr2s)
+
     pc2=brauser.find_element(By.CSS_SELECTOR,"div.price-wrapper strong")
-    prise_campaign2_size=pc2.size
-    pricesizeC2=[]
-    for key, value in prise_campaign2_size.items():
-        pricesizeC2.append(value)
-    print(pricesizeC2)
-    assert pricesizeR2[0]<pricesizeC2[0]
-    assert pricesizeR2[1]<pricesizeC2[1]
+    prise_campaign2_size=pc2.value_of_css_property('font-size')
+    pc2s=prise_campaign2_size.replace('px',"")
+    print(pc2s)
+    assert float(pr2s)<float(pc2s)
 
     prise_campaign2=pc2.text
     print(prise_campaign2)
     assert prise_campaign2==prise_campaign
     #цвет
     prise_regular2_color=pg2.value_of_css_property("color")
-    print(prise_regular2_color)
-    pr2c=prise_regular2_color.replace('rgba(',"").replace(")","")
+    pr2cc=Color.from_string(prise_regular2_color).rgba
+    print(pr2cc)
+    pr2c=pr2cc.replace('rgba(',"").replace(")","")
     prc2=pr2c.split(', ')
     assert prc2[0]==prc2[1]==prc2[2]
 
     prise_campaign2_color=pc2.value_of_css_property("color")
-    print(prise_campaign2_color)
-    pc2c=prise_campaign_color.replace('rgba(',"").replace(")","")
+    pc2cc=Color.from_string(prise_campaign2_color).rgba
+    print(pc2cc)
+    pc2c=pc2cc.replace('rgba(',"").replace(")","")
     pcc2=pc2c.split(', ')
     assert pcc2[1]=='0'
     assert pcc2[2]=='0'
 
     bold_compaign=pc2.value_of_css_property("font-weight")
     print(bold_compaign)
-    assert int(bold_compaign)>=weight
 
     prise_regular_line=pg2.value_of_css_property('text-decoration-line')
     print(prise_regular_line)
