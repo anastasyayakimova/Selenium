@@ -10,12 +10,12 @@ import os
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-def new_window(brauser, old_windows):
-    new_windows=brauser.window_handles
-    wait=WebDriverWait(brauser, 30)
-    wait.until(lambda d:len(old_windows) < len(new_windows))
-    new_windows=old_windows-new_windows
-    return new_windows
+# def new_window(brauser, old_windows):
+#     new_windows=brauser.window_handles
+#     wait=WebDriverWait(brauser, 30)
+#     wait.until(lambda d:len(old_windows) < len(new_windows))
+#     new_windows=old_windows-new_windows
+#     return new_windows
 
 brauser=webdriver.Chrome()
 brauser.implicitly_wait(0)
@@ -30,13 +30,16 @@ Newcountry=brauser.find_element(By.XPATH,"//a[text()=' Add New Country']").click
 
 Elements=brauser.find_elements(By.CSS_SELECTOR,"form[method='post'] a[target='_blank']")
 for i in range(len(Elements)):
+    vse_befor=brauser.window_handles
+    print(vse_befor)
     elem=brauser.find_elements(By.CSS_SELECTOR,"form[method='post'] a[target='_blank']")
-
     elem[i].click()
+    WebDriverWait(brauser,30).until(EC.new_window_is_opened(vse_befor))
     main_str=brauser.current_window_handle
     print(main_str)
-    vse=brauser.window_handles
     main_naw=0
+    vse=brauser.window_handles
+    print(vse)
     for j in vse:
         if j != main_str:
             main_naw=j
